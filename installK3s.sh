@@ -12,13 +12,13 @@ sudo echo "staginguser:ArcPassw0rd" | sudo chpasswd
 echo '#!/bin/bash' >> vars.sh
 echo $adminUsername:$1 | awk '{print substr($1,2); }' >> vars.sh
 echo $token:$2 | awk '{print substr($1,2); }' >> vars.sh
-echo $location:$6 | awk '{print substr($1,2); }' >> vars.sh
-echo $templateBaseUrl:${10} | awk '{print substr($1,2); }' >> vars.sh
+echo $location:$3 | awk '{print substr($1,2); }' >> vars.sh
+echo $templateBaseUrl:$4 | awk '{print substr($1,2); }' >> vars.sh
 
 sed -i '2s/^/export adminUsername=/' vars.sh
-sed -i '6s/^/export token=/' vars.sh
-sed -i '7s/^/export location=/' vars.sh
-sed -i '11s/^/export templateBaseUrl=/' vars.sh
+sed -i '3s/^/export token=/' vars.sh
+sed -i '4s/^/export location=/' vars.sh
+sed -i '5s/^/export templateBaseUrl=/' vars.sh
 
 export K3S_VERSION="v1.26.10+k3s2" # Do not change!
 
