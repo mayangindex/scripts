@@ -1,6 +1,7 @@
 #!/bin/bash
 exec >installK3s.log
-
+echo '#!/bin/bash' >> vars.sh
+echo $token >> vars.sh
 sudo apt-get update
 sudo snap install helm --classic
 sudo sed -i "s/PasswordAuthentication no/PasswordAuthentication yes/" /etc/ssh/sshd_config
