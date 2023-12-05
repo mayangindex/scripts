@@ -28,7 +28,7 @@ chmod +x vars.sh
 export K3S_VERSION="v1.26.10+k3s2" # Do not change!
 
 # Creating login message of the day (motd)
-sudo curl -v -o /etc/profile.d/welcomeK3s.sh ${templateBaseUrl}scripts/welcomeK3s.sh
+sudo curl -v -o /etc/profile.d/welcomeK3s.sh ${templateBaseUrl}main/welcomeK3s.sh
 
 # Syncing this script log to 'jumpstart_logs' directory for ease of troubleshooting
 sudo -u $adminUsername mkdir -p /home/${adminUsername}/jumpstart_logs
