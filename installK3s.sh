@@ -39,7 +39,7 @@ echo ""
 publicIp=$(hostname -i)
 sudo mkdir ~/.kube
 sudo -u $adminUsername mkdir /home/${adminUsername}/.kube
-curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --disable traefik --node-external-ip ${publicIp}" INSTALL_K3S_VERSION=${K3S_VERSION} sh -
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --disable=traefik" INSTALL_K3S_VERSION=${K3S_VERSION} sh -
 sudo chmod 644 /etc/rancher/k3s/k3s.yaml
 sudo kubectl config rename-context default arck3sdemo --kubeconfig /etc/rancher/k3s/k3s.yaml
 sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
@@ -55,6 +55,39 @@ sudo snap install helm --classic
 # Installing Azure CLI & Azure Arc Extensions
 echo ""
 sudo apt-get update
+export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+kubectl apply -f - <<EOF
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ingress-nginx
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: ingress-nginx
+  namespace: kube-system
+spec:
+  chart: ingress-nginx
+  repo: https://kubernetes.github.io/ingress-nginx
+  targetNamespace: ingress-nginx
+  version: v4.0.19
+  set:
+  valuesContent: |-
+    fullnameOverride: ingress-nginx
+    controller:
+      kind: DaemonSet
+      dnsPolicy: ClusterFirstWithHostNet
+      watchIngressWithoutClass: true
+      allowSnippetAnnotations: false
+      hostNetwork: true
+      hostPort:
+        enabled: true
+      publishService:
+        enabled: false
+      service:
+        enabled: false
+EOF
 kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.5.4/cert-manager.yaml
 sleep 60
 helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
