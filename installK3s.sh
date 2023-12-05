@@ -92,3 +92,4 @@ kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.5
 sleep 160
 helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
 helm upgrade -i rancher rancher-stable/rancher --create-namespace --namespace cattle-system --set hostname=$fqdn
+rm "$0"
