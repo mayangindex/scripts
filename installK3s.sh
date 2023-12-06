@@ -38,6 +38,13 @@ while sleep 1; do sudo -s rsync -a /var/lib/waagent/custom-script/download/0/ins
 echo ""
 sudo mkdir ~/.kube
 sudo -u $adminUsername mkdir /home/${adminUsername}/.kube
+
+# Get the current hostname
+current_hostname=$(hostname)
+
+# Check if the hostname includes "vm1"
+if [[ $current_hostname == *vm1* ]]; then
+
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --disable=traefik" K3S_TOKEN=$token INSTALL_K3S_VERSION=${K3S_VERSION} sh -
 sudo chmod 644 /etc/rancher/k3s/k3s.yaml
 sudo kubectl config rename-context default arck3sdemo --kubeconfig /etc/rancher/k3s/k3s.yaml
@@ -92,4 +99,7 @@ kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.5
 sleep 160
 helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
 helm upgrade -i rancher rancher-stable/rancher --create-namespace --namespace cattle-system --set hostname=$fqdn
-rm "$0"
+else
+ls
+fi
+# rm "$0"
