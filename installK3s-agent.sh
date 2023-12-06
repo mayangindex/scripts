@@ -38,7 +38,7 @@ while sleep 1; do sudo -s rsync -a /var/lib/waagent/custom-script/download/0/ins
 echo ""
 sudo mkdir ~/.kube
 sudo -u $adminUsername mkdir /home/${adminUsername}/.kube
-curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --disable=traefik" K3S_TOKEN=$token INSTALL_K3S_VERSION=${K3S_VERSION} sh -
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --disable=traefik" INSTALL_K3S_VERSION=${K3S_VERSION} sh -
 sudo chmod 644 /etc/rancher/k3s/k3s.yaml
 sudo kubectl config rename-context default arck3sdemo --kubeconfig /etc/rancher/k3s/k3s.yaml
 sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
